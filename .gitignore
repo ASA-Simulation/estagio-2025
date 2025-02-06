@@ -1,0 +1,10 @@
+.cache
+.vscode
+
+build/
+logs/
+out/
+
+cmake-build-*
+
+compile_commands.json
