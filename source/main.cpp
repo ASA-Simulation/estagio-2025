@@ -35,10 +35,12 @@ int main() {
     auto inicioTotal = std::chrono::high_resolution_clock::now();
     auto fimTotal = inicioTotal + std::chrono::seconds(simulationTime);
 
-    tacview::exportFrame(0.00);
+    tacview::exportInstant(0.00);
 
     while (std::chrono::high_resolution_clock::now() < fimTotal) {
         auto start = std::chrono::high_resolution_clock::now();
+
+        update(registry);
 
         auto end = std::chrono::high_resolution_clock::now();
 
@@ -51,6 +53,6 @@ int main() {
         std::chrono::duration<float> currentFrame =
             std::chrono::high_resolution_clock::now() - inicioTotal;
 
-        tacview::exportFrame(currentFrame.count());
+        tacview::exportInstant(currentFrame.count());
     }
 }

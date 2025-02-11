@@ -38,11 +38,20 @@ void startFile() {
     exportFile.close();
 }
 
-void exportFrame(float timeElapsed) {
+void exportInstant(float timeElapsed) {
     exportFile.open("../../teste.acmi", std::ios::app);
 
     exportFile << std::fixed << std::setprecision(2) << '#' << timeElapsed
                << '\n';
+
+    exportFile.close();
+}
+
+void exportEntity(int id, float longitude, float latitude, float altitude) {
+    exportFile.open("../../teste.acmi", std::ios::app);
+
+    exportFile << id << ",T=" << id << std::fixed << std::setprecision(2)
+               << longitude << '|' << latitude << '|' << altitude << '\n';
 
     exportFile.close();
 }
