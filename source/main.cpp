@@ -1,5 +1,6 @@
 #include <entt/entt.hpp>
 #include <spdlog/spdlog.h>
+#include <tupa/engine/tacview.hpp>
 
 struct position {
     float x;

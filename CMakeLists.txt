@@ -19,6 +19,7 @@ add_executable(tupa_engine)
 target_sources(tupa_engine
     PRIVATE
         source/main.cpp
+        source/tacview.cpp
 )
 
 target_include_directories(tupa_engine
