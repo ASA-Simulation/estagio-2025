@@ -16,8 +16,10 @@ void update(entt::registry &registry) {
     auto view = registry.view<const position, velocity>();
 
     for (auto entity : view) {
+        auto &pos = view.get<position>(entity);
         auto &vel = view.get<velocity>(entity);
-        spdlog::info("Vel: dx={}, dy={}", vel.dx, vel.dy);
+        spdlog::info("pos: dx={}, dy={}", pos.x, pos.y);
+        spdlog::info("spd: dx={}, dy={}", vel.dx, vel.dy);
     }
 }
 
@@ -29,7 +31,9 @@ int main() {
 
     tacview::startFile();
 
-    const auto entity = registry.create();
+    const auto plane = registry.create();
+    registry.emplace<position>(plane, 0.0f, 0.0f);
+    registry.emplace<velocity>(plane, 0.5f, 0.8f);
 
     const std::chrono::milliseconds frameDuration(1000 / frameRate);
     auto inicioTotal = std::chrono::high_resolution_clock::now();
