@@ -23,7 +23,6 @@ TacviewExporter::TacviewExporter() {
     m_exportFile << "0,LongitudeOffset=0" << std::endl
                  << "0,LatitudeOffset=0" << std::endl;
 
-    m_exportFile.flush();
 }
 
 TacviewExporter::~TacviewExporter() { m_exportFile.close(); }
@@ -44,7 +43,7 @@ std::string getCurrentDateTime() {
 void TacviewExporter::exportInstant(float timeElapsed) {
     m_exportFile << std::fixed << std::setprecision(2) << '#' << timeElapsed
                  << '\n';
-    // m_exportFile.flush();
+    m_exportFile.flush();
 }
 
 void TacviewExporter::exportEntity(int id, float latitude, float longitude,
