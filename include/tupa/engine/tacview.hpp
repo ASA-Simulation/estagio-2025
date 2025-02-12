@@ -18,7 +18,7 @@ class TacviewExporter {
     TacviewExporter &operator=(const TacviewExporter &) = delete;
 
     void exportInstant(float duration);
-    void exportEntity(int id, float longitude, float latitude, float altitude);
+    void exportEntity(int id, std::string name, float longitude, float latitude, float altitude);
 
   private:
     TacviewExporter();
@@ -35,9 +35,9 @@ inline void exportInstant(float duration) {
     TacviewExporter::getInstance().exportInstant(duration);
 };
 
-inline void exportEntity(int id, float longitude, float latitude,
+inline void exportEntity(int id, std::string name, float longitude, float latitude,
                          float altitude) {
-    TacviewExporter::getInstance().exportEntity(id, longitude, latitude,
+    TacviewExporter::getInstance().exportEntity(id, name, longitude, latitude,
                                                 altitude);
 }
 

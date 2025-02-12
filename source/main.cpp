@@ -13,21 +13,27 @@ struct velocity {
     float dy;
 };
 
+struct name {
+    std::string value;
+};
+
 void update(entt::registry &registry) {
-    auto view = registry.view<position, velocity>();
+    auto view = registry.view<position, velocity, name>();
 
     for(auto entity : view) {
         auto &pos = view.get<position>(entity);
         auto &vel = view.get<velocity>(entity);
+        auto &eName = view.get<name>(entity);
 
         pos.x += vel.dx;
         pos.y += vel.dy;
 
         spdlog::info("Entity ID: {}", static_cast<uint32_t>(entity) + 1);
+        spdlog::info("Entity Name: {}", eName.value);
         spdlog::info("pos: x={}, y={}", pos.x, pos.y);
         spdlog::info("spd: dx={}, dy={}", vel.dx, vel.dy);
 
-        tacview::exportEntity(static_cast<uint32_t>(entity) + 1, pos.x, pos.y,
+        tacview::exportEntity(static_cast<uint32_t>(entity) + 1, eName.value, pos.x, pos.y,
                               10000);
     }
 }
@@ -41,9 +47,11 @@ int main() {
     const auto plane = registry.create();
     struct position initialPos{-46.473056, -23.435556};
     struct velocity initialSpd{0.04, 0.09};
+    struct name entityName{"C172"};
 
     registry.emplace<position>(plane, initialPos.x, initialPos.y);
     registry.emplace<velocity>(plane, initialSpd.dx, initialSpd.dy);
+    registry.emplace<name>(plane, entityName.value);
 
     const std::chrono::milliseconds frameDuration(1000 / frameRate);
     auto inicioTotal = std::chrono::high_resolution_clock::now();
