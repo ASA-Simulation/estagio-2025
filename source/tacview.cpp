@@ -2,12 +2,31 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+
 #include <tupa/engine/tacview.hpp>
-#include <vector>
 
 namespace tacview {
 
-std::ofstream exportFile;
+TacviewExporter *TacviewExporter::s_instance = nullptr;
+
+TacviewExporter::TacviewExporter() {
+    m_exportFile.open("../../teste.acmi");
+
+    std::string dateTime = getCurrentDateTime();
+
+    m_exportFile << "FileType=text/acmi/tacview" << std::endl
+                 << "FileVersion=2.2" << std::endl;
+
+    m_exportFile << "0,RecordingTime=" << dateTime << std::endl
+                 << "0,MissionTime=" << dateTime << std::endl;
+
+    m_exportFile << "0,LongitudeOffset=0" << std::endl
+                 << "0,LatitudeOffset=0" << std::endl;
+
+    m_exportFile.flush();
+}
+
+TacviewExporter::~TacviewExporter() { m_exportFile.close(); }
 
 std::string getCurrentDateTime() {
     std::time_t now = std::time(nullptr);
@@ -22,38 +41,17 @@ std::string getCurrentDateTime() {
     return oss.str();
 }
 
-void startFile() {
-    exportFile.open("../../teste.acmi");
-    std::string dateTime = getCurrentDateTime();
-
-    exportFile << "FileType=text/acmi/tacview" << std::endl
-               << "FileVersion=2.2" << std::endl;
-
-    exportFile << "0,RecordingTime=" << dateTime << std::endl
-               << "0,MissionTime=" << dateTime << std::endl;
-
-    exportFile << "0,LongitudeOffset=0" << std::endl
-               << "0,LatitudeOffset=0" << std::endl;
-
-    exportFile.close();
+void TacviewExporter::exportInstant(float timeElapsed) {
+    m_exportFile << std::fixed << std::setprecision(2) << '#' << timeElapsed
+                 << '\n';
+    // m_exportFile.flush();
 }
 
-void exportInstant(float timeElapsed) {
-    exportFile.open("../../teste.acmi", std::ios::app);
-
-    exportFile << std::fixed << std::setprecision(2) << '#' << timeElapsed
-               << '\n';
-
-    exportFile.close();
-}
-
-void exportEntity(int id, float longitude, float latitude, float altitude) {
-    exportFile.open("../../teste.acmi", std::ios::app);
-
-    exportFile << id << ",T=" << std::fixed << std::setprecision(2)
-               << longitude << '|' << latitude << '|' << altitude << '\n';
-
-    exportFile.close();
+void TacviewExporter::exportEntity(int id, float longitude, float latitude,
+                                   float altitude) {
+    m_exportFile << id << ",T=" << std::fixed << std::setprecision(2)
+                 << longitude << '|' << latitude << '|' << altitude << '\n';
+    // m_exportFile.flush();
 }
 
 } // namespace tacview
