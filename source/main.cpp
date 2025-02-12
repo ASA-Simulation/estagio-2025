@@ -13,13 +13,20 @@ struct velocity {
 };
 
 void update(entt::registry &registry) {
-    auto view = registry.view<const position, velocity>();
+    auto view = registry.view<position, velocity>();
 
     for (auto entity : view) {
         auto &pos = view.get<position>(entity);
         auto &vel = view.get<velocity>(entity);
-        spdlog::info("pos: dx={}, dy={}", pos.x, pos.y);
+
+        pos.x += vel.dx;
+        pos.y += vel.dy;
+
+        spdlog::info("Entity ID: {}", static_cast<uint32_t>(entity)+1);
+        spdlog::info("pos: x={}, y={}", pos.x, pos.y);
         spdlog::info("spd: dx={}, dy={}", vel.dx, vel.dy);
+
+        tacview::exportEntity(static_cast<uint32_t>(entity) + 1, pos.x, pos.y, 10000);
     }
 }
 
@@ -39,9 +46,13 @@ int main() {
     auto inicioTotal = std::chrono::high_resolution_clock::now();
     auto fimTotal = inicioTotal + std::chrono::seconds(simulationTime);
 
-    tacview::exportInstant(0.00);
-
     while (std::chrono::high_resolution_clock::now() < fimTotal) {
+        
+        std::chrono::duration<float> currentFrame =
+            std::chrono::high_resolution_clock::now() - inicioTotal;
+
+        tacview::exportInstant(currentFrame.count());
+
         auto start = std::chrono::high_resolution_clock::now();
 
         update(registry);
@@ -53,10 +64,5 @@ int main() {
         std::this_thread::sleep_for(
             frameDuration -
             std::chrono::duration_cast<std::chrono::milliseconds>(duration));
-
-        std::chrono::duration<float> currentFrame =
-            std::chrono::high_resolution_clock::now() - inicioTotal;
-
-        tacview::exportInstant(currentFrame.count());
     }
 }
