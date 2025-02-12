@@ -1,5 +1,6 @@
 #include <entt/entt.hpp>
 #include <spdlog/spdlog.h>
+
 #include <tupa/engine/tacview.hpp>
 
 struct position {
@@ -22,11 +23,12 @@ void update(entt::registry &registry) {
         pos.x += vel.dx;
         pos.y += vel.dy;
 
-        spdlog::info("Entity ID: {}", static_cast<uint32_t>(entity)+1);
+        spdlog::info("Entity ID: {}", static_cast<uint32_t>(entity) + 1);
         spdlog::info("pos: x={}, y={}", pos.x, pos.y);
         spdlog::info("spd: dx={}, dy={}", vel.dx, vel.dy);
 
-        tacview::exportEntity(static_cast<uint32_t>(entity) + 1, pos.x, pos.y, 10000);
+        tacview::exportEntity(static_cast<uint32_t>(entity) + 1, pos.x, pos.y,
+                              10000);
     }
 }
 
@@ -35,8 +37,6 @@ int main() {
     int simulationTime = 5; // Simulation time (seconds)
 
     entt::registry registry;
-
-    tacview::startFile();
 
     const auto plane = registry.create();
     registry.emplace<position>(plane, 0.0f, 0.0f);
@@ -47,7 +47,7 @@ int main() {
     auto fimTotal = inicioTotal + std::chrono::seconds(simulationTime);
 
     while (std::chrono::high_resolution_clock::now() < fimTotal) {
-        
+
         std::chrono::duration<float> currentFrame =
             std::chrono::high_resolution_clock::now() - inicioTotal;
 
