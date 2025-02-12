@@ -16,7 +16,7 @@ struct velocity {
 void update(entt::registry &registry) {
     auto view = registry.view<position, velocity>();
 
-    for (auto entity : view) {
+    for(auto entity : view) {
         auto &pos = view.get<position>(entity);
         auto &vel = view.get<velocity>(entity);
 
@@ -39,12 +39,8 @@ int main() {
     entt::registry registry;
 
     const auto plane = registry.create();
-    struct position initialPos {
-        -46.473056, -23.435556
-    };
-    struct velocity initialSpd {
-        0.04, 0.09
-    };
+    struct position initialPos{-46.473056, -23.435556};
+    struct velocity initialSpd{0.04, 0.09};
 
     registry.emplace<position>(plane, initialPos.x, initialPos.y);
     registry.emplace<velocity>(plane, initialSpd.dx, initialSpd.dy);
@@ -53,7 +49,7 @@ int main() {
     auto inicioTotal = std::chrono::high_resolution_clock::now();
     auto fimTotal = inicioTotal + std::chrono::seconds(simulationTime);
 
-    while (std::chrono::high_resolution_clock::now() < fimTotal) {
+    while(std::chrono::high_resolution_clock::now() < fimTotal) {
 
         std::chrono::duration<float> currentFrame =
             std::chrono::high_resolution_clock::now() - inicioTotal;

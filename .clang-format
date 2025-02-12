@@ -1,3 +1,9 @@
 BasedOnStyle: LLVM
 IndentWidth: 4
 UseTab: Never
+
+SpaceBeforeParens: Custom
+SpaceBeforeParensOptions:
+  AfterControlStatements: False
+
+FileExtensions: [cpp, h, hpp]

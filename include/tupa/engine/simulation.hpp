@@ -10,22 +10,22 @@ namespace tupa::engine {
 
 class Simulation final {
 
-public:
-  Simulation();
+  public:
+    Simulation();
 
-  void step(std::uint64_t delta);
+    void step(std::uint64_t delta);
 
-private:
-  // simulation information
-  std::uint64_t m_exec_time;
+  private:
+    // simulation information
+    std::uint64_t m_exec_time;
 
-  // simulation phases
-  entt::basic_scheduler<std::uint64_t> m_dynamics;
-  entt::basic_scheduler<std::uint64_t> m_transmit;
-  entt::basic_scheduler<std::uint64_t> m_receive;
-  entt::basic_scheduler<std::uint64_t> m_process;
+    // simulation phases
+    entt::basic_scheduler<std::uint64_t> m_dynamics;
+    entt::basic_scheduler<std::uint64_t> m_transmit;
+    entt::basic_scheduler<std::uint64_t> m_receive;
+    entt::basic_scheduler<std::uint64_t> m_process;
 
-  entt::basic_registry<std::uint64_t> m_registry;
+    entt::basic_registry<std::uint64_t> m_registry;
 };
 
 } // namespace tupa::engine

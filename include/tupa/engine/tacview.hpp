@@ -7,7 +7,7 @@ class TacviewExporter {
 
   public:
     static inline TacviewExporter &getInstance() {
-        if (!s_instance) {
+        if(!s_instance) {
             s_instance = new TacviewExporter();
         }
         return *s_instance;

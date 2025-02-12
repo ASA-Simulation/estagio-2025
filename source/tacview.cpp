@@ -22,7 +22,6 @@ TacviewExporter::TacviewExporter() {
 
     m_exportFile << "0,LongitudeOffset=0" << std::endl
                  << "0,LatitudeOffset=0" << std::endl;
-
 }
 
 TacviewExporter::~TacviewExporter() { m_exportFile.close(); }
