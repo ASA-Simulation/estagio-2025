@@ -39,8 +39,15 @@ int main() {
     entt::registry registry;
 
     const auto plane = registry.create();
-    registry.emplace<position>(plane, 0.0f, 0.0f);
-    registry.emplace<velocity>(plane, 0.5f, 0.8f);
+    struct position initialPos {
+        -46.473056, -23.435556
+    };
+    struct velocity initialSpd {
+        0.04, 0.09
+    };
+
+    registry.emplace<position>(plane, initialPos.x, initialPos.y);
+    registry.emplace<velocity>(plane, initialSpd.dx, initialSpd.dy);
 
     const std::chrono::milliseconds frameDuration(1000 / frameRate);
     auto inicioTotal = std::chrono::high_resolution_clock::now();
