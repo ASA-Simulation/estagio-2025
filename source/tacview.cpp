@@ -47,11 +47,11 @@ void TacviewExporter::exportInstant(float timeElapsed) {
     // m_exportFile.flush();
 }
 
-void TacviewExporter::exportEntity(int id, float longitude, float latitude,
+void TacviewExporter::exportEntity(int id, float latitude, float longitude,
                                    float altitude) {
-    m_exportFile << id << ",T=" << std::fixed << std::setprecision(2)
-                 << longitude << '|' << latitude << '|' << altitude << '\n';
-    // m_exportFile.flush();
+    m_exportFile << id << ",T=" << std::fixed << std::setprecision(7)
+                 << latitude << '|' << longitude << '|' << std::setprecision(2)
+                 << altitude << '\n';
 }
 
 } // namespace tacview
