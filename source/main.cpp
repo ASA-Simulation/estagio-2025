@@ -3,37 +3,41 @@
 
 #include <tupa/engine/tacview.hpp>
 
-struct position {
-    float x;
-    float y;
+// Aircraft coordinates in decimal notation
+struct coordinates {
+    float lon;
+    float lat;
 };
 
+// Aircraft speed
 struct velocity {
-    float dx;
-    float dy;
+    float deltaLon;
+    float deltaLat;
 };
 
+// Aircraft name
 struct name {
     std::string value;
 };
 
+// Main Loop
 void update(entt::registry &registry) {
-    auto view = registry.view<position, velocity, name>();
+    auto view = registry.view<coordinates, velocity, name>();
 
     for(auto entity : view) {
-        auto &pos = view.get<position>(entity);
+        auto &crd = view.get<coordinates>(entity);
         auto &vel = view.get<velocity>(entity);
         auto &eName = view.get<name>(entity);
 
-        pos.x += vel.dx;
-        pos.y += vel.dy;
+        crd.lon += vel.deltaLon;
+        crd.lat += vel.deltaLat;
 
         spdlog::info("Entity ID: {}", static_cast<uint32_t>(entity) + 1);
         spdlog::info("Entity Name: {}", eName.value);
-        spdlog::info("pos: x={}, y={}", pos.x, pos.y);
-        spdlog::info("spd: dx={}, dy={}", vel.dx, vel.dy);
+        spdlog::info("longitude: {}, latitude: {}", crd.lon, crd.lat);
+        spdlog::info("spd: dlat={}, dlon={}", vel.deltaLon, vel.deltaLat);
 
-        tacview::exportEntity(static_cast<uint32_t>(entity) + 1, eName.value, pos.x, pos.y,
+        tacview::exportEntity(static_cast<uint32_t>(entity) + 1, eName.value, crd.lon, crd.lat,
                               10000);
     }
 }
@@ -44,14 +48,14 @@ int main() {
 
     entt::registry registry;
 
-    const auto plane = registry.create();
-    struct position initialPos{-46.473056, -23.435556};
+    const auto aircraft = registry.create();
+    struct coordinates initialCrd{-46.473056, -23.435556};
     struct velocity initialSpd{0.04, 0.09};
     struct name entityName{"C172"};
 
-    registry.emplace<position>(plane, initialPos.x, initialPos.y);
-    registry.emplace<velocity>(plane, initialSpd.dx, initialSpd.dy);
-    registry.emplace<name>(plane, entityName.value);
+    registry.emplace<coordinates>(aircraft, initialCrd.lon, initialCrd.lat);
+    registry.emplace<velocity>(aircraft, initialSpd.deltaLon, initialSpd.deltaLat);
+    registry.emplace<name>(aircraft, entityName.value);
 
     const std::chrono::milliseconds frameDuration(1000 / frameRate);
     auto inicioTotal = std::chrono::high_resolution_clock::now();
