@@ -24,7 +24,7 @@ struct name {
 void update(entt::registry &registry) {
     auto view = registry.view<coordinates, velocity, name>();
 
-    for(auto entity : view) {
+  for (auto entity : view) {
         auto &crd = view.get<coordinates>(entity);
         auto &vel = view.get<velocity>(entity);
         auto &eName = view.get<name>(entity);
@@ -37,47 +37,38 @@ void update(entt::registry &registry) {
         spdlog::info("longitude: {}, latitude: {}", crd.lon, crd.lat);
         spdlog::info("spd: dlat={}, dlon={}", vel.deltaLon, vel.deltaLat);
 
-        tacview::exportEntity(static_cast<uint32_t>(entity) + 1, eName.value, crd.lon, crd.lat,
-                              10000);
+    tacview::exportEntity(static_cast<uint32_t>(entity) + 1, eName.value,
+                          crd.lon, crd.lat, 10000);
     }
 }
 
 int main() {
-    int frameRate = 24;     // Frames per Second
-    int simulationTime = 5; // Simulation time (seconds)
+  int timeStep = 100;         //       Time step (milliseconds)
+  int simulationTime = 10000; // Simulation time (milisseconds)
+  int timeElapsed = 0;        //    Time elapsed (milisseconds)
 
     entt::registry registry;
 
     const auto aircraft = registry.create();
-    struct coordinates initialCrd{-46.473056, -23.435556};
-    struct velocity initialSpd{0.04, 0.09};
-    struct name entityName{"C172"};
+  struct coordinates initialCrd {
+    - 46.473056, -23.435556
+  };
+  struct velocity initialSpd {
+    0.04, 0.09
+  };
+  struct name entityName {
+    "C172"
+  };
 
     registry.emplace<coordinates>(aircraft, initialCrd.lon, initialCrd.lat);
-    registry.emplace<velocity>(aircraft, initialSpd.deltaLon, initialSpd.deltaLat);
+  registry.emplace<velocity>(aircraft, initialSpd.deltaLon,
+                             initialSpd.deltaLat);
     registry.emplace<name>(aircraft, entityName.value);
 
-    const std::chrono::milliseconds frameDuration(1000 / frameRate);
-    auto inicioTotal = std::chrono::high_resolution_clock::now();
-    auto fimTotal = inicioTotal + std::chrono::seconds(simulationTime);
-
-    while(std::chrono::high_resolution_clock::now() < fimTotal) {
-
-        std::chrono::duration<float> currentFrame =
-            std::chrono::high_resolution_clock::now() - inicioTotal;
-
-        tacview::exportInstant(currentFrame.count());
-
-        auto start = std::chrono::high_resolution_clock::now();
-
+  while (timeElapsed < simulationTime) {
+    tacview::TacviewExporter::getInstance().exportInstant(timeElapsed / 1000.0);
         update(registry);
-
-        auto end = std::chrono::high_resolution_clock::now();
-
-        std::chrono::duration<double> duration = end - start;
-
-        std::this_thread::sleep_for(
-            frameDuration -
-            std::chrono::duration_cast<std::chrono::milliseconds>(duration));
+    timeElapsed += timeStep;
     }
+
 }
