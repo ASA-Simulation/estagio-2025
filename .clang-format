@@ -5,5 +5,3 @@ UseTab: Never
 SpaceBeforeParens: Custom
 SpaceBeforeParensOptions:
   AfterControlStatements: False
-
-FileExtensions: [cpp, h, hpp]
