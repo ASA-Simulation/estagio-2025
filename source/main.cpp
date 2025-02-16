@@ -1,24 +1,8 @@
 #include <entt/entt.hpp>
 #include <spdlog/spdlog.h>
 
+#include <tupa/engine/aircraft.hpp>
 #include <tupa/engine/tacview.hpp>
-
-// Aircraft coordinates in decimal notation
-struct coordinates {
-    float lon;
-    float lat;
-};
-
-// Aircraft speed
-struct velocity {
-    float deltaLon;
-    float deltaLat;
-};
-
-// Aircraft name
-struct name {
-    std::string value;
-};
 
 // Main Loop
 void update(entt::registry &registry) {
@@ -49,21 +33,7 @@ int main() {
 
     entt::registry registry;
 
-    const auto aircraft = registry.create();
-    struct coordinates initialCrd {
-        - 46.473056, -23.435556
-    };
-    struct velocity initialSpd {
-        0.04, 0.09
-    };
-    struct name entityName {
-        "C172"
-    };
-
-    registry.emplace<coordinates>(aircraft, initialCrd.lon, initialCrd.lat);
-    registry.emplace<velocity>(aircraft, initialSpd.deltaLon,
-                               initialSpd.deltaLat);
-    registry.emplace<name>(aircraft, entityName.value);
+    createAircraft(registry, -46.473056, -23.435556, 0.04, 0.09, "C172");
 
     while(timeElapsed < simulationTime) {
         tacview::TacviewExporter::getInstance().exportInstant(timeElapsed /

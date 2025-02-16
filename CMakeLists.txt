@@ -20,6 +20,7 @@ target_sources(tupa_engine
     PRIVATE
         source/main.cpp
         source/tacview.cpp
+        source/aircraft.cpp
 )
 
 target_include_directories(tupa_engine
